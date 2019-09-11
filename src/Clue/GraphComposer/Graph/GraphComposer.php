@@ -16,7 +16,7 @@ class GraphComposer
     const MAJOR_AVAILABLE   = 3;
 
     const VERTEX_COLORS = [
-        self::ABANDONED_PACKAGE => '#A31717',
+        self::ABANDONED_PACKAGE => '#FF5A52',
         self::MAJOR_AVAILABLE => '#FF7e0d',
         self::MINOR_AVAILABLE => '#FFFA5C',
         self::PATCH_AVAILABLE => '#90DB27',
@@ -24,7 +24,6 @@ class GraphComposer
     ];
 
     private $layoutVertex = array(
-        'fillcolor' => '#eeeeee',
         'style' => 'filled, rounded',
         'shape' => 'box',
         'fontcolor' => '#314B5F'
@@ -92,7 +91,7 @@ class GraphComposer
             $this->setLayout(
                 $start,
                 [
-                    'color' => self::VERTEX_COLORS[$this->getCurrentPackageVersionStatus($package->getName())],
+                    'fillcolor' => self::VERTEX_COLORS[$this->getCurrentPackageVersionStatus($package->getName())],
                     'label' => $label
                 ] + $this->layoutVertex
             );
