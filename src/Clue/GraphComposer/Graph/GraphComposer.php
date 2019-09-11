@@ -9,6 +9,19 @@ use Graphp\GraphViz\GraphViz;
 
 class GraphComposer
 {
+    const ABANDONED_PACKAGE = -1;
+    const LATEST            = 0;
+    const PATCH_AVAILABLE   = 1;
+    const MINOR_AVAILABLE   = 2;
+    const MAJOR_AVAILABLE   = 3;
+
+    const VERTEX_COLORS = [
+        self::ABANDONED_PACKAGE => '#A31717',
+        self::MAJOR_AVAILABLE => '#FF7e0d',
+        self::MAJOR_AVAILABLE => '#FFFA5C',
+        self::MAJOR_AVAILABLE => '#3ABA4D',
+    ];
+
     private $layoutVertex = array(
         'fillcolor' => '#eeeeee',
         'style' => 'filled, rounded',
@@ -32,10 +45,14 @@ class GraphComposer
 
     private $dependencyGraph;
 
-    /**
-     * @var GraphViz
-     */
+    /** @var GraphViz */
     private $graphviz;
+
+    /** @var string */
+    private $dir;
+
+    /** @var array */
+    private $versions;
 
     /**
      *
@@ -48,14 +65,14 @@ class GraphComposer
             $graphviz = new GraphViz();
             $graphviz->setFormat('svg');
         }
+
         $analyzer = new \JMS\Composer\DependencyAnalyzer();
         $this->dependencyGraph = $analyzer->analyze($dir);
         $this->graphviz = $graphviz;
+        $this->dir = $dir;
     }
 
     /**
-     *
-     * @param string $dir
      * @return \Fhaculty\Graph\Graph
      */
     public function createGraph()
@@ -71,7 +88,13 @@ class GraphComposer
                 $label .= ': ' . $package->getVersion();
             }
 
-            $this->setLayout($start, array('label' => $label) + $this->layoutVertex);
+            $this->setLayout(
+                $start,
+                [
+                    'color' => self::VERTEX_COLORS[$this->getCurrentPackageVersionStatus($package->getName())],
+                    'label' => $label
+                ] + $this->layoutVertex
+            );
 
             foreach ($package->getOutEdges() as $requires) {
                 $targetName = $requires->getDestPackage()->getName();
@@ -121,5 +144,34 @@ class GraphComposer
         $this->graphviz->setFormat($format);
 
         return $this;
+    }
+
+    protected function getCurrentPackageVersionStatus($package)
+    {
+        if (!$this->versions) {
+            foreach (explode("\n", shell_exec("cd {$this->dir} && composer outdated  2>&1")) as $package) {
+                $parts = preg_split('/\s+/', $package);
+
+                if (strstr($package, 'abandoned')) {
+                    $this->versions[$parts[1]] = self::ABANDONED_PACKAGE;
+                    continue;
+                }
+
+                $currentVersion = explode('.', $parts[1]);
+                $latestVersion = explode('.', $parts[3]);
+
+                if ($currentVersion[0] !== $latestVersion[0]) {
+                    $this->versions[$parts[0]] = self::MAJOR_AVAILABLE;
+                } elseif ($currentVersion[1] !== $latestVersion[1]) {
+                    $this->versions[$parts[0]] = self::MINOR_AVAILABLE;
+                } elseif ($currentVersion[2] !== $latestVersion[2]) {
+                    $this->versions[$parts[0]] = self::PATCH_AVAILABLE;
+                } else {
+                    $this->versions[$parts[0]] = self::LATEST;
+                }
+            }
+        }
+
+        return $this->versions[$package] ?? self::LATEST;
     }
 }
