@@ -78,6 +78,7 @@ $ php graph-composer.phar export ~/path/to/your/project
 |--only-regex    |Hides packages that are **not** matching the regular expression |`graph-composer show --only-regex "#^mycompany/#"`         |
 |--exclude-type  |Hides packages that are of the given type                       |`graph-composer show --exclude-type "typo3-cms-framework"` |
 |--only-type     |Hides packages that are **not** of the given type               |`graph-composer show --only-type "typo3-cms-framework"`    |
+|--colorize      |Colorize packages to indicate if an update is available         |`graph-composer show --colorize`                           |
 
 ## Install
 
