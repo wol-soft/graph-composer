@@ -18,8 +18,9 @@ class GraphComposer
     const VERTEX_COLORS = [
         self::ABANDONED_PACKAGE => '#A31717',
         self::MAJOR_AVAILABLE => '#FF7e0d',
-        self::MAJOR_AVAILABLE => '#FFFA5C',
-        self::MAJOR_AVAILABLE => '#3ABA4D',
+        self::MINOR_AVAILABLE => '#FFFA5C',
+        self::PATCH_AVAILABLE => '#90DB27',
+        self::LATEST => '#3ABA4D',
     ];
 
     private $layoutVertex = array(
