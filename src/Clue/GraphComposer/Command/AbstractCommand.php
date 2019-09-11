@@ -30,6 +30,7 @@ class AbstractCommand extends Command
             ->addOption('only-regex', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Includes only packages using a regular expression like #^phpunit/.*/$#')
             ->addOption('exclude-type', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Excludes packages of given type.')
             ->addOption('only-type', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Includes only packages of given type.')
+            ->addOption('colorize', null, InputOption::VALUE_NONE, 'Colorize packages to indicate if an update is available')
         ;
     }
 
@@ -84,7 +85,8 @@ class AbstractCommand extends Command
             null,
             $packageRule,
             $dependencyRule,
-            (int)$input->getOption('depth')
+            (int)$input->getOption('depth'),
+            (bool)$input->getOption('colorize')
         );
         $graph->setFormat($input->getOption('format'));
 

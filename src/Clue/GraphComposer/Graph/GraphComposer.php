@@ -70,6 +70,11 @@ class GraphComposer
     private $maxDepth;
 
     /**
+     * @var bool
+     */
+    private $colorize;
+
+    /**
      * @var PackageRule
      */
     private $packageExclusionRule;
@@ -84,7 +89,8 @@ class GraphComposer
         GraphViz $graphviz = null,
         PackageRule $packageExclusionRule = null,
         DependencyRule $dependencyExclusionRule = null,
-        $maxDepth = PHP_INT_MAX
+        $maxDepth = PHP_INT_MAX,
+        $colorize = false
     ) {
         if ($graphviz === null) {
             $graphviz = new GraphViz();
@@ -107,6 +113,7 @@ class GraphComposer
         $this->packageExclusionRule = $packageExclusionRule;
         $this->dependencyExclusionRule = $dependencyExclusionRule;
         $this->maxDepth = $maxDepth;
+        $this->colorize = $colorize;
     }
 
     /**
@@ -175,9 +182,11 @@ class GraphComposer
         }
 
         $this->setLayout(
-            $start,
+            $vertex,
             [
-                'fillcolor' => self::VERTEX_COLORS[$this->getCurrentPackageVersionStatus($package->getName())],
+                'fillcolor' => $this->colorize
+                    ? self::VERTEX_COLORS[$this->getCurrentPackageVersionStatus($packageNode->getName())]
+                    : '#eeeeee',
                 'label' => $label
             ] + $this->layoutVertex
         );
