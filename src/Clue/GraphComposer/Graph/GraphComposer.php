@@ -13,6 +13,7 @@ use Fhaculty\Graph\Attribute\AttributeBagNamespaced;
 use Fhaculty\Graph\Graph;
 use Graphp\GraphViz\GraphViz;
 use JMS\Composer\DependencyAnalyzer;
+use JMS\Composer\Graph\DependencyEdge;
 use JMS\Composer\Graph\PackageNode;
 
 class GraphComposer
@@ -316,15 +317,15 @@ class GraphComposer
         $directDependencies = count(
             array_filter(
                 $this->dependencyGraph->getRootPackage()->getOutEdges(),
-                function ($dependency) {
-                    return !$this->dependencyExclusionRule->isExcluded($dependency);
+                function (DependencyEdge $dependency) use ($drawnPackages) {
+                    return in_array($dependency->getDestPackage()->getName(), array_keys($drawnPackages));
                 }
             )
         );
 
         return [
             'dependencies' => [
-                'direct' => count($this->dependencyGraph->getRootPackage()->getOutEdges()),
+                'direct' => $directDependencies,
                 // minus one --> root package
                 'indirect' => count($drawnPackages) - 1 - $directDependencies,
                 'total' => count($drawnPackages) - 1,
