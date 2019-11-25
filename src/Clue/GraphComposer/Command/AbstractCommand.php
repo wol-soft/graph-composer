@@ -31,7 +31,7 @@ class AbstractCommand extends Command
             ->addOption('exclude-type', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Excludes packages of given type.')
             ->addOption('only-type', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Includes only packages of given type.')
             ->addOption('colorize', null, InputOption::VALUE_NONE, 'Colorize packages to indicate if an update is available')
-            ->addOption('summary', null, InputOption::VALUE_REQUIRED, 'Additionally to the generated image generate a file with a machine readable summary of the dependencies (export.json)')
+            ->addOption('summary-file', null, InputOption::VALUE_REQUIRED, 'Additionally to the generated image generate a file with a machine readable summary of the dependencies (export.json)')
         ;
     }
 
@@ -88,7 +88,7 @@ class AbstractCommand extends Command
             $dependencyRule,
             (int)$input->getOption('depth'),
             (bool)$input->getOption('colorize'),
-            $input->getOption('export')
+            $input->getOption('summary-file')
         );
         $graph->setFormat($input->getOption('format'));
 
