@@ -79,7 +79,7 @@ $ php graph-composer.phar export ~/path/to/your/project
 |--exclude-type  |Hides packages that are of the given type                                                 |`graph-composer show --exclude-type "typo3-cms-framework"` |
 |--only-type     |Hides packages that are **not** of the given type                                         |`graph-composer show --only-type "typo3-cms-framework"`    |
 |--colorize      |Colorize packages to indicate if an update is available                                   |`graph-composer show --colorize`                           |
-|--exportFile    |Create a machine readable summary file of the dependencies (Supported file types: `json`) |`graph-composer show --exportFile example.json`            |
+|--summary       |Create a machine readable summary file of the dependencies (Supported file types: `json`) |`graph-composer show --summary example.json`               |
 
 ## Install
 
