@@ -263,15 +263,15 @@ class GraphComposer
     {
         if (!$this->versions) {
             foreach (explode("\n", shell_exec("cd {$this->dir} && composer outdated  2>&1")) as $package) {
-                // filter out lines which don't provide package information
-                if (!preg_match('/[^\s]+\s+(v?\d+(.\d+){2}.*?){2}/', $package)) {
-                    continue;
-                }
-
                 $parts = preg_split('/\s+/', $package);
 
                 if (strstr($package, 'abandoned')) {
                     $this->versions[$parts[1]] = self::ABANDONED_PACKAGE;
+                    continue;
+                }
+
+                // filter out lines which don't provide package information
+                if (!preg_match('/[^\s]+\s+(v?\d+(.\d+){2}.*?){2}/', $package)) {
                     continue;
                 }
 
