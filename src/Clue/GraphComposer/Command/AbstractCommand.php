@@ -31,7 +31,7 @@ class AbstractCommand extends Command
             ->addOption('exclude-type', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Excludes packages of given type.')
             ->addOption('only-type', null, InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Includes only packages of given type.')
             ->addOption('colorize', null, InputOption::VALUE_NONE, 'Colorize packages to indicate if an update is available')
-            ->addOption('exportFile', null, InputOption::VALUE_REQUIRED, 'Additionally to the generated image generate a file with a machine readable summary of the dependencies (export.json)')
+            ->addOption('export-file', null, InputOption::VALUE_REQUIRED, 'Additionally to the generated image generate a file with a machine readable summary of the dependencies (export.json)')
         ;
     }
 
