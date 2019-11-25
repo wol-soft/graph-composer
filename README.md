@@ -67,19 +67,19 @@ $ php graph-composer.phar export ~/path/to/your/project
 
 ### Options
 
-|Option          |Description                                                         |Example                                                    |
-|----------------|--------------------------------------------------------------------|-----------------------------------------------------------|
-|--format        |Image format (`svg`, `png` or `jpeg`), default `svg`                |`graph-composer show --format png`                         |
-|--no-dev        |Hides dev dependencies                                              |`graph-composer show --no-dev`                             |
-|--no-php        |Hides dependency to PHP version                                     |`graph-composer show --no-php`                             |
-|--no-ext        |Hides dependency to PHP extensions                                  |`graph-composer show --no-ext`                             |
-|--depth         |Stops rendering the graph at the given depth                        |`graph-composer show --depth 3`                            |
-|--exclude-regex |Hides packages that are matching the regular expression             |`graph-composer show --exclude-regex "#^phpunit/#"`        |
-|--only-regex    |Hides packages that are **not** matching the regular expression     |`graph-composer show --only-regex "#^mycompany/#"`         |
-|--exclude-type  |Hides packages that are of the given type                           |`graph-composer show --exclude-type "typo3-cms-framework"` |
-|--only-type     |Hides packages that are **not** of the given type                   |`graph-composer show --only-type "typo3-cms-framework"`    |
-|--colorize      |Colorize packages to indicate if an update is available             |`graph-composer show --colorize`                           |
-|--export        |Create a machine readable summary file of the dependencies (`json`) |`graph-composer show --export json`                           |
+|Option          |Description                                                                               |Example                                                    |
+|----------------|------------------------------------------------------------------------------------------|-----------------------------------------------------------|
+|--format        |Image format (`svg`, `png` or `jpeg`), default `svg`                                      |`graph-composer show --format png`                         |
+|--no-dev        |Hides dev dependencies                                                                    |`graph-composer show --no-dev`                             |
+|--no-php        |Hides dependency to PHP version                                                           |`graph-composer show --no-php`                             |
+|--no-ext        |Hides dependency to PHP extensions                                                        |`graph-composer show --no-ext`                             |
+|--depth         |Stops rendering the graph at the given depth                                              |`graph-composer show --depth 3`                            |
+|--exclude-regex |Hides packages that are matching the regular expression                                   |`graph-composer show --exclude-regex "#^phpunit/#"`        |
+|--only-regex    |Hides packages that are **not** matching the regular expression                           |`graph-composer show --only-regex "#^mycompany/#"`         |
+|--exclude-type  |Hides packages that are of the given type                                                 |`graph-composer show --exclude-type "typo3-cms-framework"` |
+|--only-type     |Hides packages that are **not** of the given type                                         |`graph-composer show --only-type "typo3-cms-framework"`    |
+|--colorize      |Colorize packages to indicate if an update is available                                   |`graph-composer show --colorize`                           |
+|--summary-file  |Create a machine readable summary file of the dependencies (Supported file types: `json`) |`graph-composer show --summary-file example.json`          |
 
 ## Install
 

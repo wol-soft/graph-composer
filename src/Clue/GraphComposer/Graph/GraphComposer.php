@@ -80,7 +80,7 @@ class GraphComposer
     /**
      * @var string
      */
-    private $exportFormat;
+    private $exportFile;
 
     /**
      * @var PackageRule
@@ -99,7 +99,7 @@ class GraphComposer
         DependencyRule $dependencyExclusionRule = null,
         $maxDepth = PHP_INT_MAX,
         $colorize = false,
-        $exportFormat = null
+        $exportFile = null
     ) {
         if ($graphviz === null) {
             $graphviz = new GraphViz();
@@ -123,7 +123,7 @@ class GraphComposer
         $this->dependencyExclusionRule = $dependencyExclusionRule;
         $this->maxDepth = $maxDepth;
         $this->colorize = $colorize;
-        $this->exportFormat = $exportFormat;
+        $this->exportFile = $exportFile;
     }
 
     /**
@@ -138,10 +138,15 @@ class GraphComposer
         $rootPackage = $this->dependencyGraph->getRootPackage();
         $this->drawPackageNode($graph, $rootPackage, $drawnPackages, $this->layoutVertexRoot);
 
-        if ($this->exportFormat) {
+        if ($this->exportFile) {
+            if (!preg_match('/^.+\.[\w]+$/', $this->exportFile)) {
+                throw new Exception("Invalid export file name {$this->exportFile}");
+            }
+
+            $fileNameParts = explode('.', $this->exportFile);
             file_put_contents(
-                'graph-composer.' . strtolower($this->exportFormat),
-                (new ExporterFactory())->getExporter($this->exportFormat)->exportGraph(
+                $this->exportFile,
+                (new ExporterFactory())->getExporter(end($fileNameParts))->exportGraph(
                     $this->getExportData($drawnPackages)
                 )
             );
