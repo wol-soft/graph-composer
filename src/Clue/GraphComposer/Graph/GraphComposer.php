@@ -258,6 +258,11 @@ class GraphComposer
     {
         if (!$this->versions) {
             foreach (explode("\n", shell_exec("cd {$this->dir} && composer outdated  2>&1")) as $package) {
+                // filter out lines which don't provide package information
+                if (!preg_match('/[^\s]+\s+(v?\d+(.\d+){2}.*?){2}/', $package)) {
+                    continue;
+                }
+
                 $parts = preg_split('/\s+/', $package);
 
                 if (strstr($package, 'abandoned')) {
@@ -293,7 +298,7 @@ class GraphComposer
                 array_filter(
                     $this->versions,
                     function ($packageStatus) use ($status) {
-                        return $status === self::ABANDONED_PACKAGE;
+                        return $status === $packageStatus;
                     }
                 )
             );
@@ -309,7 +314,7 @@ class GraphComposer
                 'total' => count($drawnPackages) - 1,
             ],
             'dependencyStatus' => [
-                'latest' => $getStatus(self::LATEST),
+                'latest' => count($drawnPackages) - 1 - count($this->versions),
                 'patchAvailable' => $getStatus(self::PATCH_AVAILABLE),
                 'minorAvailable' => $getStatus(self::MINOR_AVAILABLE),
                 'majorAvailable' => $getStatus(self::MAJOR_AVAILABLE),

@@ -16,7 +16,7 @@ class ExporterFactory
     public function getExporter($exportFormat)
     {
         $exportFormat = strtoupper($exportFormat);
-        $class = "Clue\GraphComposer\Exporter\{$exportFormat}Exporter";
+        $class = "\\Clue\\GraphComposer\\Exporter\\{$exportFormat}Exporter";
 
         if (!class_exists($class)) {
             throw new Exception("Not supported export format $exportFormat");
