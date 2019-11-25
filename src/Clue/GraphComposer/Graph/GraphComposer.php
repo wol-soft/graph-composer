@@ -6,10 +6,13 @@ use Clue\GraphComposer\Exclusion\Dependency\ChainedDependencyRule;
 use Clue\GraphComposer\Exclusion\Dependency\DependencyRule;
 use Clue\GraphComposer\Exclusion\Package\ChainedPackageRule;
 use Clue\GraphComposer\Exclusion\Package\PackageRule;
+use Clue\GraphComposer\Exporter\ExporterFactory;
+use Exception;
 use Fhaculty\Graph\Attribute\AttributeAware;
 use Fhaculty\Graph\Attribute\AttributeBagNamespaced;
 use Fhaculty\Graph\Graph;
 use Graphp\GraphViz\GraphViz;
+use JMS\Composer\DependencyAnalyzer;
 use JMS\Composer\Graph\PackageNode;
 
 class GraphComposer
@@ -75,6 +78,11 @@ class GraphComposer
     private $colorize;
 
     /**
+     * @var string
+     */
+    private $exportFormat;
+
+    /**
      * @var PackageRule
      */
     private $packageExclusionRule;
@@ -90,7 +98,8 @@ class GraphComposer
         PackageRule $packageExclusionRule = null,
         DependencyRule $dependencyExclusionRule = null,
         $maxDepth = PHP_INT_MAX,
-        $colorize = false
+        $colorize = false,
+        $exportFormat = null
     ) {
         if ($graphviz === null) {
             $graphviz = new GraphViz();
@@ -106,7 +115,7 @@ class GraphComposer
             $dependencyExclusionRule = new ChainedDependencyRule();
         }
 
-        $analyzer = new \JMS\Composer\DependencyAnalyzer();
+        $analyzer = new DependencyAnalyzer();
         $this->dependencyGraph = $analyzer->analyze($dir);
         $this->graphviz = $graphviz;
         $this->dir = $dir;
@@ -114,10 +123,12 @@ class GraphComposer
         $this->dependencyExclusionRule = $dependencyExclusionRule;
         $this->maxDepth = $maxDepth;
         $this->colorize = $colorize;
+        $this->exportFormat = $exportFormat;
     }
 
     /**
-     * @return \Fhaculty\Graph\Graph
+     * @return Graph
+     * @throws Exception
      */
     public function createGraph()
     {
@@ -126,6 +137,15 @@ class GraphComposer
         $drawnPackages = array();
         $rootPackage = $this->dependencyGraph->getRootPackage();
         $this->drawPackageNode($graph, $rootPackage, $drawnPackages, $this->layoutVertexRoot);
+
+        if ($this->exportFormat) {
+            file_put_contents(
+                'graph-composer.' . strtolower($this->exportFormat),
+                (new ExporterFactory())->getExporter($this->exportFormat)->exportGraph(
+                    $this->getExportData($drawnPackages)
+                )
+            );
+        }
 
         return $graph;
     }
@@ -238,6 +258,11 @@ class GraphComposer
     {
         if (!$this->versions) {
             foreach (explode("\n", shell_exec("cd {$this->dir} && composer outdated  2>&1")) as $package) {
+                // filter out lines which don't provide package information
+                if (!preg_match('/[^\s]+\s+(v?\d+(.\d+){2}.*?){2}/', $package)) {
+                    continue;
+                }
+
                 $parts = preg_split('/\s+/', $package);
 
                 if (strstr($package, 'abandoned')) {
@@ -261,5 +286,40 @@ class GraphComposer
         }
 
         return $this->versions[$package] ?? self::LATEST;
+    }
+
+    protected function getExportData(array $drawnPackages)
+    {
+        // make sure $this->versions is populated
+        $this->getCurrentPackageVersionStatus(null);
+
+        $getStatus = function ($status) {
+            return count(
+                array_filter(
+                    $this->versions,
+                    function ($packageStatus) use ($status) {
+                        return $status === $packageStatus;
+                    }
+                )
+            );
+        };
+
+        $directDependencies = count($this->dependencyGraph->getRootPackage()->getOutEdges());
+
+        return [
+            'dependencies' => [
+                'direct' => count($this->dependencyGraph->getRootPackage()->getOutEdges()),
+                // minus one --> root package
+                'indirect' => count($drawnPackages) - 1 - $directDependencies,
+                'total' => count($drawnPackages) - 1,
+            ],
+            'dependencyStatus' => [
+                'latest' => count($drawnPackages) - 1 - count($this->versions),
+                'patchAvailable' => $getStatus(self::PATCH_AVAILABLE),
+                'minorAvailable' => $getStatus(self::MINOR_AVAILABLE),
+                'majorAvailable' => $getStatus(self::MAJOR_AVAILABLE),
+                'abandoned' => $getStatus(self::ABANDONED_PACKAGE),
+            ]
+        ];
     }
 }
