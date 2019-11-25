@@ -298,6 +298,10 @@ class GraphComposer
         // make sure $this->versions is populated
         $this->getCurrentPackageVersionStatus(null);
 
+        foreach (array_diff(array_keys($this->versions), array_keys($drawnPackages)) as $excludedPackage) {
+            unset($this->versions[$excludedPackage]);
+        }
+
         $getStatus = function ($status) {
             return count(
                 array_filter(
@@ -309,7 +313,14 @@ class GraphComposer
             );
         };
 
-        $directDependencies = count($this->dependencyGraph->getRootPackage()->getOutEdges());
+        $directDependencies = count(
+            array_filter(
+                $this->dependencyGraph->getRootPackage()->getOutEdges(),
+                function ($dependency) {
+                    return !$this->dependencyExclusionRule->isExcluded($dependency);
+                }
+            )
+        );
 
         return [
             'dependencies' => [
