@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c31de0f06eba6d6c9066b3fbad43d749",
+    "content-hash": "964abbff0160f6102d7ac44412f005be",
     "packages": [
         {
             "name": "clue/graph",
@@ -766,60 +766,6 @@
     ],
     "packages-dev": [
         {
-            "name": "clue/phar-composer",
-            "version": "v1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/clue/phar-composer.git",
-                "reference": "597437e2c70f7b5214223b79d2fe8c3e88135842"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/clue/phar-composer/zipball/597437e2c70f7b5214223b79d2fe8c3e88135842",
-                "reference": "597437e2c70f7b5214223b79d2fe8c3e88135842",
-                "shasum": ""
-            },
-            "require": {
-                "herrera-io/box": "^1.5",
-                "knplabs/packagist-api": "^1.0",
-                "symfony/console": "^5.0 || ^4.0 || ^3.0 || ^2.5",
-                "symfony/finder": "^5.0 || ^4.0 || ^3.0 || ^2.5",
-                "symfony/process": "^5.0 || ^4.0 || ^3.0 || ^2.5"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.8"
-            },
-            "bin": [
-                "bin/phar-composer"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Clue": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Christian Lück",
-                    "email": "christian@clue.engineering"
-                }
-            ],
-            "description": "Simple phar creation for any project managed via Composer",
-            "homepage": "https://github.com/clue/phar-composer",
-            "keywords": [
-                "build process",
-                "bundle dependencies",
-                "composer",
-                "executable phar",
-                "phar"
-            ],
-            "time": "2019-11-22T07:57:12+00:00"
-        },
-        {
             "name": "doctrine/inflector",
             "version": "2.0.3",
             "source": {
@@ -1194,6 +1140,7 @@
             "keywords": [
                 "phar"
             ],
+            "abandoned": "humbug/box",
             "time": "2014-12-03T23:26:45+00:00"
         },
         {
@@ -1807,6 +1754,7 @@
             "keywords": [
                 "tokenizer"
             ],
+            "abandoned": true,
             "time": "2017-12-04T08:55:13+00:00"
         },
         {
@@ -2766,11 +2714,74 @@
                 "validate"
             ],
             "time": "2020-07-08T17:02:28+00:00"
+        },
+        {
+            "name": "wol-soft/phar-composer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wol-soft/phar-composer.git",
+                "reference": "c373405b53bb11f2933ac23c966a1501237da759"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wol-soft/phar-composer/zipball/c373405b53bb11f2933ac23c966a1501237da759",
+                "reference": "c373405b53bb11f2933ac23c966a1501237da759",
+                "shasum": ""
+            },
+            "require": {
+                "herrera-io/box": "^1.5",
+                "knplabs/packagist-api": "^1.0",
+                "symfony/console": "^5.0 || ^4.0 || ^3.0 || ^2.5",
+                "symfony/finder": "^5.0 || ^4.0 || ^3.0 || ^2.5",
+                "symfony/process": "^5.0 || ^4.0 || ^3.0 || ^2.5"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8"
+            },
+            "bin": [
+                "bin/phar-composer"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Clue": "src/"
+                }
+            },
+            "scripts": {
+                "build": [
+                    "@php bin/build.php"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@clue.engineering"
+                }
+            ],
+            "description": "Simple phar creation for any project managed via Composer",
+            "homepage": "https://github.com/clue/phar-composer",
+            "keywords": [
+                "build process",
+                "bundle dependencies",
+                "composer",
+                "executable phar",
+                "phar"
+            ],
+            "support": {
+                "source": "https://github.com/wol-soft/phar-composer/tree/master"
+            },
+            "time": "2020-11-18T12:32:27+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "wol-soft/phar-composer": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
