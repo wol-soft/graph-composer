@@ -42,5 +42,7 @@ class Export extends AbstractCommand
         } else {
             readfile($path);
         }
+
+        return 0;
     }
 }
