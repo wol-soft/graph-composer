@@ -71,6 +71,7 @@ $ php graph-composer.phar export ~/path/to/your/project
 |----------------|------------------------------------------------------------------------------------------|-----------------------------------------------------------|
 |--format        |Image format (`svg`, `png` or `jpeg`), default `svg`                                      |`graph-composer show --format png`                         |
 |--no-dev        |Hides dev dependencies                                                                    |`graph-composer show --no-dev`                             |
+|--only-dev      |Hides non dev dependencies                                                                |`graph-composer show --only-dev`                           |
 |--no-php        |Hides dependency to PHP version                                                           |`graph-composer show --no-php`                             |
 |--no-ext        |Hides dependency to PHP extensions                                                        |`graph-composer show --no-ext`                             |
 |--depth         |Stops rendering the graph at the given depth                                              |`graph-composer show --depth 3`                            |

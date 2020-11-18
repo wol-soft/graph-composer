@@ -3,6 +3,7 @@
 namespace Clue\GraphComposer\Command;
 
 use Clue\GraphComposer\Exclusion\Dependency\ChainedDependencyRule;
+use Clue\GraphComposer\Exclusion\Dependency\NegateDependencyRule;
 use Clue\GraphComposer\Exclusion\Dependency\NoDevDependencyRule;
 use Clue\GraphComposer\Exclusion\Package\ChainedPackageRule;
 use Clue\GraphComposer\Exclusion\Package\ExcludeByNamePackageRule;
@@ -23,6 +24,7 @@ class AbstractCommand extends Command
             ->addArgument('dir', InputArgument::OPTIONAL, 'Path to project directory to scan', '.')
             ->addOption('format', null, InputOption::VALUE_REQUIRED, 'Image format (svg, png, jpeg)', 'svg')
             ->addOption('no-dev', null, InputOption::VALUE_NONE, 'Removes dev dependencies from the generated graph')
+            ->addOption('only-dev', null, InputOption::VALUE_NONE, 'Removes all non dev dependencies from the generated graph')
             ->addOption('no-php', null, InputOption::VALUE_NONE, 'Hides dependency to PHP')
             ->addOption('no-ext', null, InputOption::VALUE_NONE, 'Hide PHP extensions')
             ->addOption('depth', null, InputOption::VALUE_REQUIRED, 'Set the maximum depth of dependency graph', PHP_INT_MAX)
@@ -43,6 +45,10 @@ class AbstractCommand extends Command
         $dependencyRule = new ChainedDependencyRule();
         if ($input->getOption('no-dev')) {
             $dependencyRule->add(new NoDevDependencyRule());
+        }
+
+        if ($input->getOption('only-dev')) {
+            $dependencyRule->add(new NegateDependencyRule(new NoDevDependencyRule()));
         }
 
         $packageRule = new ChainedPackageRule();
