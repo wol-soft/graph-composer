@@ -1,5 +1,5 @@
 {
-    "name": "clue/graph-composer",
+    "name": "wol-soft/graph-composer",
     "description": "Dependency graph visualization for composer.json",
     "keywords": ["dependency graph", "visualize dependencies", "visualize composer"],
     "homepage": "https://github.com/clue/graph-composer",
